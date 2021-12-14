@@ -5,15 +5,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Store {
+public class MemStore {
 
-    private static final Store INST = new Store();
+    private static final MemStore INST = new MemStore();
     private static final AtomicInteger POST_ID = new AtomicInteger(4);
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
 
-    private Store() {
+    private MemStore() {
         posts.put(1, new Post(1, "Junior Java Job", "easy", "12.02.2021"));
         posts.put(2, new Post(2, "Middle Java Job", "normal", "13.02.2021"));
         posts.put(3, new Post(3, "Senior Java Job", "hard", "14.02.2021"));
@@ -50,7 +50,7 @@ public class Store {
         }
     }
 
-    public static Store instOf() {
+    public static MemStore instOf() {
         return INST;
     }
 
