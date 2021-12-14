@@ -44,6 +44,12 @@ public class Store {
         candidates.put(candidate.getId(), candidate);
     }
 
+    public void delCon(int id) {
+        if (candidates.containsKey(id)) {
+            candidates.remove(id);
+        }
+    }
+
     public static Store instOf() {
         return INST;
     }
