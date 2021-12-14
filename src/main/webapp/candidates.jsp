@@ -48,6 +48,12 @@
                                 </a>
                                 <c:out value="${can.name}"/>
                             </td>
+                            <td>
+                                <img src="<c:url value='/download?name=${can.id}.jpg'/>" width="100px" height="100px"/>
+                                <a href="<c:url value='/uploadPhoto?name=${can.id}'/>">upload</a>
+                                <a href="<c:url value='/deletePhoto?name=${can.id}'/>">delete</a>
+                                </a>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
