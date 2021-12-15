@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dream.model.MemStore" %>
 <%@ page import="ru.job4j.dream.model.Candidate" %>
+<%@ page import="ru.job4j.dream.store.DbStore" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -28,7 +29,7 @@
     String id = request.getParameter("id");
     Candidate candidate = new Candidate(0, "");
     if (id != null) {
-        candidate = MemStore.instOf().condFindById(Integer.valueOf(id));
+        candidate = DbStore.instOf().findByIdCon(Integer.valueOf(id));
     }
 %>
 <div class="container pt-3">
