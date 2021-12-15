@@ -1,0 +1,14 @@
+ru\job4j\dream\model\MemStore.class
+ru\job4j\dream\model\Candidate.class
+ru\job4j\dream\store\DbStore.class
+ru\job4j\dream\store\DbStore$Lazy.class
+ru\job4j\dream\model\Post.class
+ru\job4j\dream\servlet\IndexServlet.class
+ru\job4j\servlets\DeleteCandidateServlet.class
+ru\job4j\servlets\UploadServlet.class
+ru\job4j\dream\servlet\CandidateServlet.class
+ru\job4j\dream\store\MainStore.class
+ru\job4j\dream\store\Store.class
+ru\job4j\dream\servlet\PostServlet.class
+ru\job4j\servlets\DownloadServlet.class
+ru\job4j\servlets\PhotoUploadServlet.class

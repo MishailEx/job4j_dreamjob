@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.11.2">
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\model\Candidate.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\model\MemStore.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\model\Post.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\servlet\CandidateServlet.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\servlet\IndexServlet.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\servlet\PostServlet.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\store\DbStore.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\store\MainStore.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\dream\store\Store.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\servlets\DeleteCandidateServlet.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\servlets\DownloadServlet.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\servlets\PhotoUploadServlet.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\java\ru\job4j\servlets\UploadServlet.java">
+</file>
+<file name="C:\projects\job4j_dreamjob\src\main\resources\db.properties">
+</file>
+</checkstyle>
