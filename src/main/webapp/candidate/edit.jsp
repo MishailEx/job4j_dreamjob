@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dream.model.MemStore" %>
 <%@ page import="ru.job4j.dream.model.Candidate" %>
 <%@ page import="ru.job4j.dream.store.DbStore" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -33,6 +33,7 @@
     }
 %>
 <div class="container pt-3">
+    <jsp:include page="/header.jsp"/>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">

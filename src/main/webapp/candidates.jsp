@@ -26,7 +26,7 @@
 </head>
 <body>
 <div class="container pt-3">
-
+    <jsp:include page="header.jsp" />
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
@@ -48,7 +48,7 @@
                                 </a>
                                 <c:out value="${can.name}"/>
                                 <p>
-                                <a href="<c:url value='/deleteCandidate?name=${can.id}'/>">delete candidate</a>
+                                    <a href="<c:url value='/deleteCandidate?name=${can.id}'/>">delete candidate</a>
                                 </p>
                             </td>
                             <td>
