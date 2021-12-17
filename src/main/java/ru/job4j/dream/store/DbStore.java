@@ -5,7 +5,6 @@ import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.dream.model.User;
 
 public class DbStore implements Store {
     private static final DbStore INSTANCE = new DbStore();
@@ -61,7 +62,7 @@ public class DbStore implements Store {
     public Collection<Post> findAllPosts() {
         List<Post> posts = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post")
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -77,7 +78,7 @@ public class DbStore implements Store {
     public Collection<Candidate> findAllCandidates() {
         List<Candidate> candidates = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM candidate")
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -108,7 +109,7 @@ public class DbStore implements Store {
 
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO post(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name) VALUES (?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
@@ -126,7 +127,7 @@ public class DbStore implements Store {
 
     private void update(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE post SET name = ? WHERE id = ?",
+             PreparedStatement ps = cn.prepareStatement("UPDATE post SET name = ? WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
@@ -139,7 +140,7 @@ public class DbStore implements Store {
 
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE candidate SET name = ? WHERE id = ?",
+             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = ? WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
@@ -152,7 +153,7 @@ public class DbStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
@@ -170,7 +171,7 @@ public class DbStore implements Store {
 
     public Post findById(int id) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE id = ?")
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE id = ?")
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -186,7 +187,7 @@ public class DbStore implements Store {
 
     public Candidate findByIdCon(int id) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM candidate WHERE id = ?")
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id = ?")
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -202,7 +203,7 @@ public class DbStore implements Store {
 
     public void delCon(int id) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("DELETE FROM candidate WHERE id = ?",
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM candidate WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
@@ -210,5 +211,43 @@ public class DbStore implements Store {
         } catch (Exception e) {
             LOG.error("Failed to delete", e);
         }
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM users WHERE email = ?")
+        ) {
+            ps.setString(1, email);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    return new User(it.getString("email"), it.getString("password"));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Failed to find by email", e);
+        }
+        return null;
+    }
+
+    @Override
+    public User addUser(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name, email, password ) VALUES (?, ?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Failed to create", e);
+        }
+        return user;
     }
 }
