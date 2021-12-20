@@ -1,11 +1,9 @@
 package ru.job4j.dream.store;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -32,7 +30,6 @@ public class DbStoreTest {
                     config.getProperty("jdbc.url"),
                     config.getProperty("jdbc.username"),
                     config.getProperty("jdbc.password")
-
             );
         } catch (Exception e) {
             throw new IllegalStateException(e);
@@ -46,7 +43,7 @@ public class DbStoreTest {
 
     @After
     public void wipeTable() throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("delete from post; delete from candidate;")) {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM post; ALTER TABLE post ALTER COLUMN id RESTART WITH 1; DELETE FROM candidate; ALTER TABLE candidate ALTER COLUMN id RESTART WITH 1; DELETE FROM users;")) {
             statement.execute();
         }
     }
@@ -131,5 +128,32 @@ public class DbStoreTest {
         store.save(post1);
         Post res = store.findById(post1.getId());
         assertThat(res.getId(), is(post1.getId()));
+    }
+
+    @Test
+    public void whenRegisterUserExist() {
+        Store store = DbStore.instOf();
+        User user = new User("oleg", "oleg@mail.ru", "oleg");
+        User user2 = new User("ivan", "oleg@mail.ru", "ivan");
+        store.addUser(user);
+        store.addUser(user2);
+        User user3 = store.findByEmail("oleg@mail.ru");
+        assertThat(user3.getName(), is(user.getName()));
+    }
+
+    @Test
+    public void whenFindByEmailWhenExist() {
+        Store store = DbStore.instOf();
+        User user = new User("oleg", "oleg@mail.ru", "oleg");
+        store.addUser(user);
+        User user1 = store.findByEmail("oleg@mail.ru");
+        assertThat(user, is(user1));
+    }
+
+    @Test
+    public void whenFindByEmailWhenNotExist() {
+        Store store = DbStore.instOf();
+        User user = store.findByEmail("oleg@mail.ru");
+        Assert.assertNull(user);
     }
 }

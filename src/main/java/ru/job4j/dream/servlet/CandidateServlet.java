@@ -1,7 +1,6 @@
 package ru.job4j.dream.servlet;
 
 import ru.job4j.dream.model.Candidate;
-import ru.job4j.dream.model.MemStore;
 import ru.job4j.dream.store.DbStore;
 
 import javax.servlet.ServletException;

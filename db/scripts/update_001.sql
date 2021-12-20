@@ -1,15 +1,17 @@
 CREATE TABLE post (
-   id SERIAL PRIMARY KEY,
-   name TEXT
+    id   INT IDENTITY PRIMARY KEY ,
+    name VARCHAR (100)
 );
 
 CREATE TABLE candidate (
-   id SERIAL PRIMARY KEY,
-   name TEXT
+    id   INT IDENTITY PRIMARY KEY ,
+    name VARCHAR (100)
 );
 
 CREATE TABLE users (
-   id SERIAL PRIMARY KEY,
-   name TEXT,
-   email TEXT
+    id       INT IDENTITY PRIMARY KEY ,
+    name     VARCHAR (100),
+    email    VARCHAR (100),
+    password VARCHAR (100),
+    UNIQUE (email)
 );
