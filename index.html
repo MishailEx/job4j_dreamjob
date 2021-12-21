@@ -22,6 +22,18 @@
             return false;
         }
     </script>
+    <script>
+        function addRow() {
+            const name = $('#name').val();
+            const surname = $('#surname').val();
+            const sex = $('#sex').val();
+            const description = $('#description').val();
+            $('#table tr:last').after('<tr><td>' + name
+                + '</td><td>' + surname + '</td><td>'
+                + sex + '</td><td>' + description
+                + '</td></tr>');
+        }
+    </script>
 </head>
 <body>
 
@@ -47,10 +59,10 @@
             <p><textarea rows="10" cols="45" name="text" title="Enter user desc." id="description"></textarea></p>
         </div>
         <button type="submit" class="btn btn-primary" onclick="return validate();">Submit</button>
+        <button type="button" class="btn btn-default" onclick="addRow()">Add row</button>
     </form>
 </div>
-</div>
-<table class="table">
+<table class="table" id='table'>
     <thead>
     <tr>
         <th scope="col">Имя</th>
