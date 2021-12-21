@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+            var fruits = [$('#name'), $('#surname'),
+                $('#sex'), $('#description')];
+            $.each(fruits, function (index, value) {
+                var val = value.val();
+                if (val !== '') {
+                    alert(val);
+                } else {
+                    alert(value.attr('title'))
+                }
+            });
+            return false;
+        }
+    </script>
 </head>
 <body>
 
@@ -14,25 +29,24 @@
     <form>
         <div class="form-group" style="width: 400px">
             <label for="name">Имя</label>
-            <input type="text" class="form-control" id="name">
+            <input type="text" class="form-control" title="Enter user name." id="name">
         </div>
         <div class="form-group" style="width: 400px">
             <label for="surname">Фамилия</label>
-            <input type="text" class="form-control" id="surname">
-        </div>
-        <div class="custom-control custom-radio">
-            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
-            <label class="custom-control-label" for="customRadio1">Мужчина</label>
-        </div>
-        <div class="custom-control custom-radio">
-            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-            <label class="custom-control-label" for="customRadio2">Женщина</label>
+            <input type="text" class="form-control" title="Enter user surname." id="surname">
         </div>
         <div class="form-group">
-           <p><label for="description">Описание</label></p>
-           <p> <textarea rows="10" cols="45" name="text" id="description"></textarea></p>
+            <label for="sex">Выберите пол</label>
+            <select class="form-control" style="width: 150px" title="Enter user sex." id="sex">
+                <option>Мужчина</option>
+                <option>Женщина</option>
+            </select>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="form-group">
+            <p><label for="description">Описание</label></p>
+            <p><textarea rows="10" cols="45" name="text" title="Enter user desc." id="description"></textarea></p>
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="return validate();">Submit</button>
     </form>
 </div>
 </div>
