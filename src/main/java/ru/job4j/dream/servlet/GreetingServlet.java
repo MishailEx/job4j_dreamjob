@@ -26,7 +26,6 @@ public class GreetingServlet extends HttpServlet {
         resp.setContentType("application/json; charset=utf-8");
         OutputStream output = resp.getOutputStream();
         String json = GSON.toJson(email);
-        resp.setHeader("Access-Control-Allow-Origin", "*");
         output.write(json.getBytes(StandardCharsets.UTF_8));
         output.flush();
         output.close();

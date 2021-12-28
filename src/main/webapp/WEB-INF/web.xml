@@ -109,4 +109,12 @@
     <servlet-name>CityServlet</servlet-name>
     <url-pattern>/cities</url-pattern>
   </servlet-mapping>
+  <filter>
+    <filter-name>CorsFilter</filter-name>
+    <filter-class>ru.job4j.dream.filter.CORSFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CorsFilter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
 </web-app>

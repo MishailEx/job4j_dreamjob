@@ -27,7 +27,6 @@ public class CandidateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String edit = req.getParameter("edit");
         String path = edit != null ? "/candidate/edit.jsp" : "/candidates.jsp";
-        resp.setHeader("Access-Control-Allow-Origin", "*");
         req.setAttribute("user", req.getSession().getAttribute("user"));
         if (edit == null) {
             req.setAttribute("candidates", STORE.findAllCandidates());
