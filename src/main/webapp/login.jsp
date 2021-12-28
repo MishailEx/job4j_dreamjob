@@ -21,6 +21,22 @@
             crossorigin="anonymous"></script>
 
     <title>Работа мечты</title>
+    <script>
+        function validate() {
+            const form = document.querySelector('.form');
+            var list = [$('#email'), $('#password')];
+            form.onsubmit = function (evt) {
+                $.each(list, function (index, value) {
+                    var val = value.val();
+                    if (val == '') {
+                        alert('Поле ' + value.attr('name') + ' не заполненно');
+                        evt.preventDefault();
+                    }
+                });
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="container pt-3">
@@ -31,26 +47,27 @@
                 Авторизация
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/auth.do" method="post">
+                <form class="form" action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
                         <label>Почта</label>
-                        <input type="text" class="form-control" name="email">
+                        <input type="text" class="form-control" name="email" id="email">
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>
-                        <input type="text" class="form-control" name="password">
+                        <input type="text" class="form-control" name="password" id="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Войти</button>
-
+                    <button type="submit" class="btn btn-primary" onclick="return validate();" id="button">Войти
+                    </button>
                     <c:if test="${not empty error}">
                         <div style="color:red; font-weight: bold; margin: 30px 0;">
                             <c:out value="${error}"/>
                         </div>
                     </c:if>
                 </form>
-                <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">
-                    <button type="button" class="btn btn-primary">Регистрация</button>
-                </a>
+                <br/>
+                <button type="button" class="btn btn-primary"
+                        onclick="document.location='<%=request.getContextPath()%>/reg.jsp'">Регистрация
+                </button>
             </div>
         </div>
     </div>

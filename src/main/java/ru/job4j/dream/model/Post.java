@@ -1,22 +1,22 @@
 package ru.job4j.dream.model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Post {
     private int id;
     private String name;
     private String description;
-    private String created;
+    private LocalDateTime created;
 
     public Post(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Post(int id, String name, String description, String created) {
+    public Post(int id, String name, LocalDateTime created) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.created = created;
     }
 
@@ -44,11 +44,11 @@ public class Post {
         this.description = description;
     }
 
-    public String getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 

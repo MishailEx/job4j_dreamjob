@@ -29,6 +29,7 @@ public class PostServletTest {
         when(req.getParameter("id")).thenReturn("0");
         when(req.getParameter("name")).thenReturn("name of new post");
         when(req.getParameter("description")).thenReturn("d");
+
         new PostServlet().doPost(req, resp);
         Post post = STORE.findById(1);
         assertThat(post, notNullValue());
@@ -58,7 +59,8 @@ public class PostServletTest {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
         when(req.getParameter("id")).thenReturn("0");
-        when(req.getParameter("name")).thenReturn("name of new post");
+        when(req.getParameter("name")).thenReturn("name of new candidate");
+        when(req.getParameter("city")).thenReturn("2");
         new CandidateServlet().doPost(req, resp);
         Candidate candidate = STORE.findByIdCon(1);
         assertThat(candidate, notNullValue());

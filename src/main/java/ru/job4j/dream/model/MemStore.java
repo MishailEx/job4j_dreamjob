@@ -1,5 +1,6 @@
 package ru.job4j.dream.model;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,9 +15,9 @@ public class MemStore {
 
 
     private MemStore() {
-        posts.put(1, new Post(1, "Junior Java Job", "easy", "12.02.2021"));
-        posts.put(2, new Post(2, "Middle Java Job", "normal", "13.02.2021"));
-        posts.put(3, new Post(3, "Senior Java Job", "hard", "14.02.2021"));
+        posts.put(1, new Post(1, "Junior Java Job", LocalDateTime.now()));
+        posts.put(2, new Post(2, "Middle Java Job", LocalDateTime.now()));
+        posts.put(3, new Post(3, "Senior Java Job", LocalDateTime.now()));
         candidates.put(1, new Candidate(1, "Junior"));
         candidates.put(2, new Candidate(2, "Middle"));
         candidates.put(3, new Candidate(3, "Senior"));

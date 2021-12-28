@@ -25,10 +25,11 @@
     <title>Работа мечты</title>
 </head>
 <body>
+<c:set var="city"  value="${allCities}" />
 <div class="container pt-3">
-    <jsp:include page="header.jsp" />
+    <jsp:include page="header.jsp"/>
     <div class="row">
-        <div class="card" style="width: 100%">
+        <div class="card" style="width: 70%">
             <div class="card-header">
                 Кандидаты
             </div>
@@ -47,6 +48,9 @@
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
                                 <c:out value="${can.name}"/>
+                                <p>
+                                <c:out value="Город: ${city[can.city_id]}"/>
+                                </p>
                                 <p>
                                     <a href="<c:url value='/deleteCandidate?name=${can.id}'/>">delete candidate</a>
                                 </p>

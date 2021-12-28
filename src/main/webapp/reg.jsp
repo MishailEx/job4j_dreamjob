@@ -21,6 +21,22 @@
             crossorigin="anonymous"></script>
 
     <title>Работа мечты</title>
+    <script>
+        function validate() {
+            const form = document.querySelector('.form');
+            var list = [$('#name'), $('#email'), $('#password')];
+            form.onsubmit = function (evt) {
+                $.each(list, function (index, value) {
+                    var val = value.val();
+                    if (val == '') {
+                        alert('Поле ' + value.attr('name') + ' не заполненно');
+                        evt.preventDefault();
+                    }
+                });
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="container pt-3">
@@ -31,20 +47,20 @@
                 Регистрация
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/reg.do" method="post">
+                <form class="form" action="<%=request.getContextPath()%>/reg.do" method="post">
                     <div class="form-group">
                         <label>Имя</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="name" id="name">
                     </div>
                     <div class="form-group">
                         <label>Почта</label>
-                        <input type="text" class="form-control" name="email">
+                        <input type="text" class="form-control" name="email" id="email">
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>
-                        <input type="text" class="form-control" name="password">
+                        <input type="text" class="form-control" name="password" id="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Регистрация</button>
+                    <button type="submit" class="btn btn-primary" onclick="return validate();">Регистрация</button>
                     <c:if test="${not empty error}">
                         <div style="color:red; font-weight: bold; margin: 30px 0;">
                             <c:out value="${error}"/>

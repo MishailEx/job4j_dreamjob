@@ -9,10 +9,8 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +64,9 @@ public class DbStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    posts.add(new Post(it.getInt("id"), it.getString("name")));
+                    posts.add(new Post(it.getInt("id"),
+                            it.getString("name"),
+                            it.getTimestamp("created").toLocalDateTime()));
                 }
             }
         } catch (Exception e) {
@@ -82,7 +82,10 @@ public class DbStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
+                    candidates.add(new Candidate(it.getInt("id"),
+                            it.getString("name"),
+                            it.getInt("city_id"),
+                            it.getTimestamp("created").toLocalDateTime()));
                 }
             }
         } catch (Exception e) {
@@ -122,6 +125,7 @@ public class DbStore implements Store {
         } catch (Exception e) {
             LOG.error("Failed to create", e);
         }
+        post.setCreated(LocalDateTime.now());
         return post;
     }
 
@@ -140,11 +144,12 @@ public class DbStore implements Store {
 
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = ? WHERE id = ?",
+             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = ?, city_id = ? WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getId());
+            ps.setInt(2, candidate.getCityId());
+            ps.setInt(3, candidate.getId());
             ps.execute();
         } catch (Exception e) {
             LOG.error("Failed to update", e);
@@ -153,10 +158,11 @@ public class DbStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES (?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getCityId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -166,6 +172,7 @@ public class DbStore implements Store {
         } catch (Exception e) {
             LOG.error("Failed to create", e);
         }
+        candidate.setCreated(LocalDateTime.now());
         return candidate;
     }
 
@@ -176,7 +183,8 @@ public class DbStore implements Store {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return new Post(it.getInt("id"), it.getString("name"));
+                    return new Post(it.getInt("id"), it.getString("name"),
+                            it.getTimestamp("created").toLocalDateTime().withNano(0));
                 }
             }
         } catch (Exception e) {
@@ -192,7 +200,10 @@ public class DbStore implements Store {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return new Candidate(it.getInt("id"), it.getString("name"));
+                    return new Candidate(it.getInt("id"),
+                            it.getString("name"),
+                            it.getInt("city_id"),
+                            it.getTimestamp("created").toLocalDateTime().withNano(0));
                 }
             }
         } catch (Exception e) {
@@ -249,5 +260,61 @@ public class DbStore implements Store {
             LOG.error("Failed to create", e);
         }
         return user;
+    }
+
+    @Override
+    public Map<Integer, String> allCity() {
+        Map<Integer, String> cities = new LinkedHashMap<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM city")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.put(it.getInt("id"), it.getString("name"));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error connect to table 'city'", e);
+        }
+        return cities;
+    }
+
+    public List<Post> postForDay() {
+        List<Post> posts = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE created "
+                     + "BETWEEN CURRENT_TIMESTAMP - interval '1 day' AND CURRENT_TIMESTAMP")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    posts.add(new Post(it.getInt("id"),
+                            it.getString("name"),
+                            it.getTimestamp("created").toLocalDateTime().withNano(0)));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error connect to table 'post'", e);
+        }
+        return posts;
+    }
+
+    public List<Candidate> candidateForDay() {
+        List<Candidate> candidates = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE created "
+                     + "BETWEEN CURRENT_TIMESTAMP - interval '1 day' AND CURRENT_TIMESTAMP")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    candidates.add(new Candidate(it.getInt("id"),
+                            it.getString("name"),
+                            it.getInt("city_id"),
+                            it.getTimestamp("created").toLocalDateTime().withNano(0)));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error connect to table 'candidate'", e);
+        }
+        return candidates;
     }
 }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CandidateServlet extends HttpServlet {
+
     private final static Store STORE = DbStore.instOf();
 
     @Override
@@ -18,7 +19,7 @@ public class CandidateServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         STORE.save(new Candidate(
                 Integer.valueOf(req.getParameter("id")),
-                req.getParameter("name")));
+                req.getParameter("name"), Integer.valueOf(req.getParameter("city"))));
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
     }
 
@@ -26,9 +27,11 @@ public class CandidateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String edit = req.getParameter("edit");
         String path = edit != null ? "/candidate/edit.jsp" : "/candidates.jsp";
+        resp.setHeader("Access-Control-Allow-Origin", "*");
         req.setAttribute("user", req.getSession().getAttribute("user"));
         if (edit == null) {
             req.setAttribute("candidates", STORE.findAllCandidates());
+            req.setAttribute("allCities", STORE.allCity());
         }
         req.getRequestDispatcher(path).forward(req, resp);
     }
