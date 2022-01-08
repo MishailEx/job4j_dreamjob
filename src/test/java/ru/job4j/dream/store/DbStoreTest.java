@@ -43,7 +43,7 @@ public class DbStoreTest {
 
     @After
     public void wipeTable() throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM post; ALTER TABLE post ALTER COLUMN id RESTART WITH 1; DELETE FROM candidate; ALTER TABLE candidate ALTER COLUMN id RESTART WITH 1; DELETE FROM users;")) {
+        try (PreparedStatement statement =  connection.prepareStatement("DELETE FROM post; ALTER TABLE post ALTER COLUMN id RESTART WITH 1; DELETE FROM candidate; ALTER TABLE candidate ALTER COLUMN id RESTART WITH 1; DELETE FROM users;")) {
             statement.execute();
         }
     }
