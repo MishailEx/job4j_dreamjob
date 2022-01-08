@@ -54,7 +54,8 @@
                     </div>
                     <div class="form-group">
                         <label>Почта</label>
-                        <input type="text" class="form-control" name="email" id="email">
+                        <input type="email" id="email" name="email"
+                               pattern=".+@mail.ru" size="30" required>
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>

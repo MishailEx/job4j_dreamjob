@@ -17,15 +17,8 @@ public class RegServlet extends HttpServlet {
             String name = req.getParameter("name");
             String email = req.getParameter("email");
             String password = req.getParameter("password");
-            if (email.matches("^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\\.[a-zA-Z]{2,4}")) {
-
-                DbStore.instOf().addUser(new User(name, email, password));
-                req.getRequestDispatcher("auth.do").forward(req, resp);
-            } else {
-                req.setAttribute("error", "Не верный формат email");
-                req.getRequestDispatcher("reg.jsp").forward(req, resp);
-            }
-
+            DbStore.instOf().addUser(new User(name, email, password));
+            req.getRequestDispatcher("auth.do").forward(req, resp);
         } else  {
             req.setAttribute("error", "такой пользователь уже существует");
             req.getRequestDispatcher("reg.jsp").forward(req, resp);
