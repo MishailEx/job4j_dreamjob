@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class PostServlet extends HttpServlet {
-    private final Store store = DbStore.instOf();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
+        Store store = DbStore.instOf();
         store.save(
                 new Post(Integer.valueOf(req.getParameter("id")),
                         req.getParameter("name")));
@@ -24,6 +24,7 @@ public class PostServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Store store = DbStore.instOf();
         String edit = req.getParameter("edit");
         String path = edit != null ? "/post/edit.jsp" : "/posts.jsp";
         req.setAttribute("user", req.getSession().getAttribute("user"));
