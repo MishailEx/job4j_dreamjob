@@ -10,6 +10,7 @@ public class MemStore {
 
     private static final MemStore INST = new MemStore();
     private static final AtomicInteger POST_ID = new AtomicInteger(4);
+    private static final AtomicInteger CAND_ID = new AtomicInteger(4);
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
@@ -40,7 +41,7 @@ public class MemStore {
 
     public void saveCon(Candidate candidate) {
         if (candidate.getId() == 0) {
-            candidate.setId(POST_ID.incrementAndGet());
+            candidate.setId(CAND_ID.incrementAndGet());
         }
         candidates.put(candidate.getId(), candidate);
     }
