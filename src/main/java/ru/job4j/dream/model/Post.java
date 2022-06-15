@@ -1,23 +1,38 @@
 package ru.job4j.dream.model;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Post {
     private int id;
     private String name;
     private String description;
-    private LocalDateTime created;
+    private String created;
+    private String email;
 
-    public Post(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public Post() {
     }
 
-    public Post(int id, String name, LocalDateTime created) {
+    public Post(int id, String name, String description, String email) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.email = email;
+    }
+
+    public Post(int id, String name, String description, String created, String email) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
         this.created = created;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getId() {
@@ -44,11 +59,11 @@ public class Post {
         this.description = description;
     }
 
-    public LocalDateTime getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
@@ -61,11 +76,11 @@ public class Post {
             return false;
         }
         Post post = (Post) o;
-        return id == post.id;
+        return Objects.equals(name, post.name) && Objects.equals(description, post.description) && Objects.equals(email, post.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name, description, email);
     }
 }

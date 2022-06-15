@@ -1,6 +1,7 @@
 package ru.job4j.dream.servlet;
 
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.User;
 import ru.job4j.dream.store.DbStore;
 import ru.job4j.dream.store.Store;
 
@@ -15,10 +16,14 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
+        User user = (User) req.getSession().getAttribute("user");
         Store store = DbStore.instOf();
         store.save(new Candidate(
                 Integer.valueOf(req.getParameter("id")),
-                req.getParameter("name"), Integer.valueOf(req.getParameter("city"))));
+                req.getParameter("name"),
+                req.getParameter("description"),
+                Integer.valueOf(req.getParameter("city")),
+                user.getEmail()));
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
     }
 

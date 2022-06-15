@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dream.model.Post" %>
-<%@ page import="ru.job4j.dream.store.DbStore" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,41 +19,38 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Работа мечты</title>
 </head>
 <body>
-<%
-    String id = request.getParameter("id");
-    Post post = new Post();
-    if (id != null) {
-        post = DbStore.instOf().findById(Integer.valueOf(id));
-    }
-%>
 <div class="container pt-3">
-    <jsp:include page="/header.jsp"/>
+    <jsp:include page="../header.jsp"/>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                <% if (id == null) { %>
-                Новая вакансия.
-                <% } else { %>
-                Редактирование вакансии.
-                <% } %>
+                <h5><c:out value="${post.name}"/></h5>
             </div>
-            <div class="card-body">
-                <form action="<%=request.getContextPath()%>/posts.do?id=<%=post.getId()%>" method="post">
-                    <div class="form-group">
-                        <label>Имя</label>
-                        <input type="text" class="form-control" name="name" value="<%=post.getName()%>">
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div>
+                        <h4 class="card-title">Описание вакансии:</h4>
+                        <br/>
+                        <c:out value="${post.description}"/>
                     </div>
-                    <div class="form-group">
-                        <label>Описание вакансии</label>
-                        <textarea class="form-control" style="height: 150px" name="description"
-                                  value="<%=post.getDescription()%>"></textarea>
+                </li>
+                <li class="list-group-item">
+                    <div>
+                        <c:out value="Дата размещения вакансии: ${post.created}"/>
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </form>
-            </div>
+                </li>
+                <li class="list-group-item">
+                    <div>
+                        <a href="<c:url value = ""/>">Связаться по почте</a>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

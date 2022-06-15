@@ -4,11 +4,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -26,46 +24,40 @@
 </head>
 <body>
 <div class="container pt-3">
-    <jsp:include page="header.jsp"/>
-    <div>
-        <form action="<%=request.getContextPath()%>/findposts" method="get">
-            <p>
-                <input type="search" name="name" placeholder="Поиск вакансий">
-                <input type="submit" value="Найти">
-            </p>
-        </form>
-    </div>
+    <jsp:include page="../header.jsp"/>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Вакансии
+                <h5><c:out value="${candidate.name}"/></h5>
             </div>
             <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Названия</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${posts}" var="post">
-                        <tr>
-                            <td><c:if test="${post.email == user.email}">
-                                <a href='<c:url value="/post/edit.jsp?id=${post.id}"/>'>
-                                    <i class="fa fa-edit mr-3"></i>
-                                </a>
-                            </c:if>
-                                <div>
-                                    <a href='<c:url value="/post.do?id=${post.id}"/>'><c:out value="${post.name}"/></a>
-                                </div>
-                                <div>
-                                    <c:out value="${post.created}"/>
-                                </div>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <div>
+                    <img src="<c:url value='/download?name=${candidate.id}.jpg'/>" width="150px" height="150px"/>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="card-text">
+                            <h4 class="card-title">О себе:</h4>
+                            <br/>
+                            <c:out value="${candidate.description}"/>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="card-text">
+                            <c:out value="Город проживания: ${city}"/>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="card-text">
+                            <c:out value="Дата размещения резюме: ${candidate.created}"/>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="card-text">
+                            <a class="card-link" href="<c:url value = ""/>">Связаться по почте</a>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

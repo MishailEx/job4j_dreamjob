@@ -21,4 +21,9 @@ public interface Store {
     Map<Integer, String> allCity();
     List<Post> postForDay();
     List<Candidate> candidateForDay();
+    Candidate findCandidateById(int id);
+    Collection<Post> findPostByName(String name);
+    Collection<Candidate> findCandidateByName(String name);
+
+
 }

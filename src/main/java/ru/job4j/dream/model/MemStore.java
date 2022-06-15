@@ -16,12 +16,12 @@ public class MemStore {
 
 
     private MemStore() {
-        posts.put(1, new Post(1, "Junior Java Job", LocalDateTime.now()));
-        posts.put(2, new Post(2, "Middle Java Job", LocalDateTime.now()));
-        posts.put(3, new Post(3, "Senior Java Job", LocalDateTime.now()));
-        candidates.put(1, new Candidate(1, "Junior"));
-        candidates.put(2, new Candidate(2, "Middle"));
-        candidates.put(3, new Candidate(3, "Senior"));
+        posts.put(1, new Post(1, "Junior Java Job", "ddd", LocalDateTime.now().toString(), null));
+        posts.put(2, new Post(2, "Middle Java Job", "ddd", LocalDateTime.now().toString(), null));
+        posts.put(3, new Post(3, "Senior Java Job", "ddd", LocalDateTime.now().toString(), null));
+        candidates.put(1, new Candidate(1, "Junior", ""));
+        candidates.put(2, new Candidate(2, "Middle", ""));
+        candidates.put(3, new Candidate(3, "Senior", ""));
     }
 
     public void saveCon(Post post) {

@@ -1,6 +1,7 @@
 package ru.job4j.dream.servlet;
 
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 import ru.job4j.dream.store.DbStore;
 import ru.job4j.dream.store.Store;
 
@@ -14,11 +15,14 @@ public class PostServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        User user = (User) req.getSession().getAttribute("user");
         req.setCharacterEncoding("UTF-8");
         Store store = DbStore.instOf();
         store.save(
                 new Post(Integer.valueOf(req.getParameter("id")),
-                        req.getParameter("name")));
+                        req.getParameter("name"),
+                        req.getParameter("description"),
+                        user.getEmail()));
         resp.sendRedirect(req.getContextPath() + "/posts.do");
     }
 

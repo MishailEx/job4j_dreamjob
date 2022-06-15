@@ -2,7 +2,6 @@ package ru.job4j.dream.servlet;
 
 import ru.job4j.dream.model.User;
 import ru.job4j.dream.store.DbStore;
-import ru.job4j.dream.store.Store;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +16,8 @@ public class RegServlet extends HttpServlet {
             String name = req.getParameter("name");
             String email = req.getParameter("email");
             String password = req.getParameter("password");
-            DbStore.instOf().addUser(new User(name, email, password));
+            String role = req.getParameter("role");
+            DbStore.instOf().addUser(new User(name, email, password, role));
             req.getRequestDispatcher("auth.do").forward(req, resp);
         } else  {
             req.setAttribute("error", "такой пользователь уже существует");

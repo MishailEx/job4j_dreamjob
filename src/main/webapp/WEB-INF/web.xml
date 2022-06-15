@@ -13,12 +13,44 @@
     <url-pattern>/posts.do</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>FindPostServlet</servlet-name>
+    <servlet-class>ru.job4j.dream.servlet.FindPostServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FindPostServlet</servlet-name>
+    <url-pattern>/findposts</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>FindCandidateServlet</servlet-name>
+    <servlet-class>ru.job4j.dream.servlet.FindCandidateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FindCandidateServlet</servlet-name>
+    <url-pattern>/findcandidates</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>PostShowServlet</servlet-name>
+    <servlet-class>ru.job4j.dream.servlet.PostShowServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PostShowServlet</servlet-name>
+    <url-pattern>/post.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>CandidateServlet</servlet-name>
     <servlet-class>ru.job4j.dream.servlet.CandidateServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>CandidateServlet</servlet-name>
     <url-pattern>/candidates.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CandidateShowServlet</servlet-name>
+    <servlet-class>ru.job4j.dream.servlet.CandidateShowServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CandidateShowServlet</servlet-name>
+    <url-pattern>/candidate.do</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>IndexServlet</servlet-name>

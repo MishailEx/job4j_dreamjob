@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,12 +25,16 @@ public class PostServletTest {
     public void whenCreatePost() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
+        HttpSession session = mock(HttpSession.class);
+        when(req.getSession()).thenReturn(session);
+        when(session.getAttribute("user"))
+                .thenReturn(new User("ff", "email@mail.ru", "111", "1"));
         when(req.getParameter("id")).thenReturn("0");
         when(req.getParameter("name")).thenReturn("name of new post");
         when(req.getParameter("description")).thenReturn("d");
-
         new PostServlet().doPost(req, resp);
         Post post = STORE.findById(1);
+
         assertThat(post, notNullValue());
     }
 
@@ -41,7 +44,7 @@ public class PostServletTest {
         HttpServletResponse resp = mock(HttpServletResponse.class);
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
         HttpSession session = mock(HttpSession.class);
-        User user = new User(2, "jon", "admin@mail.ru", "admin");
+        User user = new User(2, "jon", "admin@mail.ru", "admin", "HR");
         session.setAttribute("user", user);
         when(req.getParameter("edit")).thenReturn(null);
         when(req.getSession()).thenReturn(session);
@@ -58,6 +61,10 @@ public class PostServletTest {
     public void whenCreateCandidate() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
+        HttpSession session = mock(HttpSession.class);
+        when(req.getSession()).thenReturn(session);
+        when(session.getAttribute("user"))
+                .thenReturn(new User("ff", "email@mail.ru", "111", "1"));
         when(req.getParameter("id")).thenReturn("0");
         when(req.getParameter("name")).thenReturn("name of new candidate");
         when(req.getParameter("city")).thenReturn("2");
@@ -72,7 +79,7 @@ public class PostServletTest {
         HttpServletResponse resp = mock(HttpServletResponse.class);
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
         HttpSession session = mock(HttpSession.class);
-        User user = new User(2, "jon", "admin@mail.ru", "admin");
+        User user = new User(2, "jon", "admin@mail.ru", "admin", "HR");
         session.setAttribute("user", user);
         when(req.getParameter("edit")).thenReturn(null);
         when(req.getSession()).thenReturn(session);

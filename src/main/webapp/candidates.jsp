@@ -25,11 +25,19 @@
     <title>Работа мечты</title>
 </head>
 <body>
-<c:set var="city"  value="${allCities}" />
+
 <div class="container pt-3">
     <jsp:include page="header.jsp"/>
+    <div>
+        <form action="<%=request.getContextPath()%>/findcandidates" method="get">
+            <p>
+                <input type="search" name="name" placeholder="Поиск соискателя">
+                <input type="submit" value="Найти">
+            </p>
+        </form>
+    </div>
     <div class="row">
-        <div class="card" style="width: 70%">
+        <div class="card" style="width: 100%">
             <div class="card-header">
                 Кандидаты
             </div>
@@ -44,21 +52,30 @@
                     <c:forEach items="${candidates}" var="can">
                         <tr>
                             <td>
-                                <a href='<c:url value="/candidate/edit.jsp?id=${can.id}"/>'>
-                                    <i class="fa fa-edit mr-3"></i>
-                                </a>
-                                <c:out value="${can.name}"/>
+                                <c:if test="${can.email == user.email}">
+                                    <a href='<c:url value="/candidate/edit.jsp?id=${can.id}"/>'>
+                                        <i class="fa fa-edit mr-3"></i>
+                                    </a>
+                                </c:if>
+                                <a href='<c:url value="/candidate.do?id=${can.id}"/>'><c:out value="${can.name}"/></a>
                                 <p>
-                                <c:out value="Город: ${city[can.city_id]}"/>
+                                    <c:forEach var="city" items="${allCities}">
+                                        <c:if test="${city.key == can.cityId}">
+                                            <c:out value="Город: ${city.value}"/>
+                                        </c:if>
+                                    </c:forEach>
                                 </p>
-                                <p>
-                                    <a href="<c:url value='/deleteCandidate?name=${can.id}'/>">delete candidate</a>
-                                </p>
+                                <c:if test="${can.email == user.email}">
+                                    <p>
+                                        <a href="<c:url value='/deleteCandidate?name=${can.id}'/>">Удалить резюме</a>
+                                    </p>
+                                </c:if>
                             </td>
                             <td>
                                 <img src="<c:url value='/download?name=${can.id}.jpg'/>" width="100px" height="100px"/>
-                                <a href="<c:url value='/uploadPhoto?name=${can.id}'/>">upload photo</a>
-                                </a>
+                                <c:if test="${can.email == user.email}">
+                                    <a href="<c:url value='/uploadPhoto?name=${can.id}'/>">upload photo</a>
+                                </c:if>
                             </td>
                         </tr>
                     </c:forEach>

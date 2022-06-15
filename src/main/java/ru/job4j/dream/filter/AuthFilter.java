@@ -14,8 +14,8 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest sreq, ServletResponse sresp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) sreq;
         HttpServletResponse resp = (HttpServletResponse) sresp;
-        String uri = req.getRequestURI();
-        if (uri.endsWith("auth.do") || uri.endsWith("reg.do")) {
+        String url = req.getRequestURI();
+        if (url.endsWith("auth.do") || url.endsWith("reg.do")) {
             chain.doFilter(sreq, sresp);
             return;
         }

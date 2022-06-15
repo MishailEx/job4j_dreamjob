@@ -1,34 +1,56 @@
 package ru.job4j.dream.model;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Candidate {
     private int id;
     private String name;
+    private String description;
     private int cityId;
-    private LocalDateTime created;
+    private String created;
+    private String email;
 
-    public Candidate(int id, String name) {
+    public Candidate(int id, String name, String description) {
         this.id = id;
         this.name = name;
+        this.description = description;
     }
 
-    public Candidate(int id, String name, int cityId) {
+    public Candidate(int id, String name, String description, int cityId, String email) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.cityId = cityId;
+        this.email = email;
     }
 
-    public Candidate(int id, String name, int cityId, LocalDateTime created) {
+    public Candidate(int id, String name, String description, int cityId, String created, String email) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.cityId = cityId;
         this.created = created;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setId(int id) {
@@ -51,11 +73,11 @@ public class Candidate {
         this.cityId = cityId;
     }
 
-    public LocalDateTime getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
@@ -68,12 +90,11 @@ public class Candidate {
             return false;
         }
         Candidate candidate = (Candidate) o;
-        return id == candidate.id
-                && Objects.equals(name, candidate.name);
+        return cityId == candidate.cityId && Objects.equals(name, candidate.name) && Objects.equals(description, candidate.description) && Objects.equals(email, candidate.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(name, description, cityId, email);
     }
 }

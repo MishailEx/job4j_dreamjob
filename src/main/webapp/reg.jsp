@@ -61,6 +61,12 @@
                         <label>Пароль</label>
                         <input type="text" class="form-control" name="password" id="password">
                     </div>
+                    <div class="form-group">
+                        <select name="role">
+                            <option>HR</option>
+                            <option>Соискатель</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary" onclick="return validate();">Регистрация</button>
                     <c:if test="${not empty error}">
                         <div style="color:red; font-weight: bold; margin: 30px 0;">

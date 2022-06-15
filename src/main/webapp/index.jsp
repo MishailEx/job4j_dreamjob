@@ -28,18 +28,21 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Сегодняшние вакансии.
+                Вакансии размещенные за последние 24 часа
             </div>
             <div class="card-body">
                 <c:forEach items="${postForDay}" var="post">
                     <tr>
                         <td>
-                            <p>
-                                <c:out value="${post.name}"/>
-                            </p>
-                            <p>
-                                <c:out value="  Дата: ${post.created}"/>
-                            </p>
+                            <div>
+                                <a href='<c:url value="/post.do?id=${post.id}"/>'><c:out value="${post.name}"/></a>
+                            </div>
+                            <div>
+                                <c:out value="  Дата размещения: ${post.created}"/>
+                            </div>
+                            <div>
+                                <a href = "<c:url value = ""/>">Связаться по почте</a>
+                            </div>
                             <br/>
                         </td>
                     </tr>
@@ -50,18 +53,21 @@
     <div class="row pt-3">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Сегодняшние кандидаты.
+                Резюме размещенные за последние 24 часа
             </div>
             <div class="card-body">
                 <c:forEach items="${candidateForDay}" var="can">
                     <tr>
                         <td>
-                            <p>
-                                <c:out value="${can.name}"/>
-                            </p>
-                            <p>
-                                <c:out value="  Дата: ${can.created}"/>
-                            </p>
+                            <div>
+                                <a href='<c:url value="/candidate.do?id=${can.id}"/>'><c:out value="${can.name}"/></a>
+                            </div>
+                            <div>
+                                <c:out value="Дата размещения: ${can.created}"/>
+                            </div>
+                            <div>
+                                <a href = "<c:url value = ""/>">Связаться по почте</a>
+                            </div>
                             <br/>
                         </td>
                     </tr>

@@ -1,20 +1,20 @@
 package ru.job4j.dream.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.job4j.dream.model.User;
 
 public class DbStore implements Store {
     private static final DbStore INSTANCE = new DbStore();
@@ -66,7 +66,9 @@ public class DbStore implements Store {
                 while (it.next()) {
                     posts.add(new Post(it.getInt("id"),
                             it.getString("name"),
-                            it.getTimestamp("created").toLocalDateTime()));
+                            it.getString("description"),
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email")));
                 }
             }
         } catch (Exception e) {
@@ -84,8 +86,10 @@ public class DbStore implements Store {
                 while (it.next()) {
                     candidates.add(new Candidate(it.getInt("id"),
                             it.getString("name"),
+                            it.getString("description"),
                             it.getInt("city_id"),
-                            it.getTimestamp("created").toLocalDateTime()));
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email")));
                 }
             }
         } catch (Exception e) {
@@ -112,10 +116,12 @@ public class DbStore implements Store {
 
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name, description, email) VALUES (?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
+            ps.setString(2, post.getDescription());
+            ps.setString(3, post.getEmail());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -125,17 +131,19 @@ public class DbStore implements Store {
         } catch (Exception e) {
             LOG.error("Failed to create", e);
         }
-        post.setCreated(LocalDateTime.now());
+        post.setCreated(LocalDateTime.now().toString());
         return post;
     }
 
     private void update(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE post SET name = ? WHERE id = ?",
+             PreparedStatement ps = cn.prepareStatement("UPDATE post SET name = ?, description = ?, email = ? WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
-            ps.setInt(2, post.getId());
+            ps.setString(2, post.getDescription());
+            ps.setString(3, post.getEmail());
+            ps.setInt(4, post.getId());
             ps.execute();
         } catch (Exception e) {
             LOG.error("Failed to update", e);
@@ -144,12 +152,14 @@ public class DbStore implements Store {
 
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = ?, city_id = ? WHERE id = ?",
+             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = ?, description = ?, city_id = ?, email = ? WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCityId());
-            ps.setInt(3, candidate.getId());
+            ps.setString(2, candidate.getDescription());
+            ps.setInt(3, candidate.getCityId());
+            ps.setString(4, candidate.getEmail());
+            ps.setInt(5, candidate.getId());
             ps.execute();
         } catch (Exception e) {
             LOG.error("Failed to update", e);
@@ -158,11 +168,13 @@ public class DbStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES (?, ?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, description, city_id, email) VALUES (?, ?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCityId());
+            ps.setString(2, candidate.getDescription());
+            ps.setInt(3, candidate.getCityId());
+            ps.setString(4, candidate.getEmail());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -172,10 +184,11 @@ public class DbStore implements Store {
         } catch (Exception e) {
             LOG.error("Failed to create", e);
         }
-        candidate.setCreated(LocalDateTime.now());
+        candidate.setCreated(LocalDateTime.now().toString());
         return candidate;
     }
 
+    @Override
     public Post findById(int id) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE id = ?")
@@ -184,7 +197,31 @@ public class DbStore implements Store {
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
                     return new Post(it.getInt("id"), it.getString("name"),
-                            it.getTimestamp("created").toLocalDateTime().withNano(0));
+                            it.getString("description"),
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email"));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Failed to find by id", e);
+        }
+        return null;
+    }
+
+    @Override
+    public Candidate findCandidateById(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id = ?")
+        ) {
+            ps.setInt(1, id);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    return new Candidate(it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("description"),
+                            it.getInt("city_id"),
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email"));
                 }
             }
         } catch (Exception e) {
@@ -202,8 +239,10 @@ public class DbStore implements Store {
                 if (it.next()) {
                     return new Candidate(it.getInt("id"),
                             it.getString("name"),
+                            it.getString("description"),
                             it.getInt("city_id"),
-                            it.getTimestamp("created").toLocalDateTime().withNano(0));
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email"));
                 }
             }
         } catch (Exception e) {
@@ -232,7 +271,11 @@ public class DbStore implements Store {
             ps.setString(1, email);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return new User(it.getInt("id"), it.getString("name"), it.getString("email"), it.getString("password"));
+                    return new User(it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("email"),
+                            it.getString("password"),
+                            it.getString("role"));
                 }
             }
         } catch (Exception e) {
@@ -244,12 +287,13 @@ public class DbStore implements Store {
     @Override
     public User addUser(User user) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name, email, password ) VALUES (?, ?, ?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name, email, password, role ) VALUES (?, ?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
+            ps.setString(4, user.getRole());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -289,7 +333,9 @@ public class DbStore implements Store {
                 while (it.next()) {
                     posts.add(new Post(it.getInt("id"),
                             it.getString("name"),
-                            it.getTimestamp("created").toLocalDateTime().withNano(0)));
+                            it.getString("description"),
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email")));
                 }
             }
         } catch (Exception e) {
@@ -308,13 +354,60 @@ public class DbStore implements Store {
                 while (it.next()) {
                     candidates.add(new Candidate(it.getInt("id"),
                             it.getString("name"),
+                            it.getString("description"),
                             it.getInt("city_id"),
-                            it.getTimestamp("created").toLocalDateTime().withNano(0)));
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email")));
                 }
             }
         } catch (Exception e) {
             LOG.error("Error connect to table 'candidate'", e);
         }
         return candidates;
+    }
+
+    @Override
+    public Collection<Candidate> findCandidateByName(String name) {
+        List<Candidate> candidates = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE name LIKE ?")
+        ) {
+            ps.setString(1, "%" + name + "%");
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    candidates.add(new Candidate(it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("description"),
+                            it.getInt("city_id"),
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error connect to table 'candidate'", e);
+        }
+        return candidates;
+    }
+
+    @Override
+    public Collection<Post> findPostByName(String name) {
+        List<Post> posts = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE name LIKE ?")
+        ) {
+            ps.setString(1, "%" + name + "%");
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    posts.add(new Post(it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("description"),
+                            new SimpleDateFormat("dd/MM/yyyy").format(it.getTimestamp("created")),
+                            it.getString("email")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Failed to find by id", e);
+        }
+        return posts;
     }
 }

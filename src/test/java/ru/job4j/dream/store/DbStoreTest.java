@@ -51,7 +51,7 @@ public class DbStoreTest {
     @Test
     public void whenCreatePost() {
         Store store = DbStore.instOf();
-        Post post = new Post(0, "Java Job");
+        Post post = new Post(0, "Java Job", "ddd", "ddd");
         store.save(post);
         Post postInDb = store.findById(post.getId());
         assertThat(postInDb.getName(), is(post.getName()));
@@ -60,7 +60,7 @@ public class DbStoreTest {
     @Test
     public void whenCreateCandidate() {
         Store store = DbStore.instOf();
-        Candidate candidate = new Candidate(0, "Oleg");
+        Candidate candidate = new Candidate(0, "Oleg", "");
         store.save(candidate);
         Candidate postInDb = store.findByIdCon(candidate.getId());
         assertThat(postInDb.getName(), is(candidate.getName()));
@@ -69,9 +69,9 @@ public class DbStoreTest {
     @Test
     public void whenUpdateCandidate() {
         Store store = DbStore.instOf();
-        Candidate candidate = new Candidate(0, "Oleg");
+        Candidate candidate = new Candidate(0, "Oleg", "");
         store.save(candidate);
-        store.save(new Candidate(candidate.getId(), "Max"));
+        store.save(new Candidate(candidate.getId(), "Max", ""));
         Candidate postInDb = store.findByIdCon(candidate.getId());
         assertThat(postInDb.getName(), is("Max"));
     }
@@ -79,9 +79,9 @@ public class DbStoreTest {
     @Test
     public void whenUpdatePost() {
         Store store = DbStore.instOf();
-        Post post = new Post(0, "Jun");
+        Post post = new Post(0, "Jun", "Jun", "Jun");
         store.save(post);
-        store.save(new Post(post.getId(), "Mid"));
+        store.save(new Post(post.getId(), "Mid", "Jun", "Jun"));
         Post postInDb = store.findById(post.getId());
         assertThat(postInDb.getName(), is("Mid"));
     }
@@ -89,8 +89,8 @@ public class DbStoreTest {
     @Test
     public void whenFindAllPosts() {
         Store store = DbStore.instOf();
-        Post post = new Post(0, "Jun");
-        Post post2 = new Post(0, "Mid");
+        Post post = new Post(0, "Jun", "Jun", "Jun");
+        Post post2 = new Post(0, "Mid", "Jun", "Jun");
         store.save(post);
         store.save(post2);
         Collection<Post> res = List.of(post, post2);
@@ -100,8 +100,8 @@ public class DbStoreTest {
     @Test
     public void whenFindAllCandidates() {
         Store store = DbStore.instOf();
-        Candidate candidate = new Candidate(0, "Jun");
-        Candidate candidate1 = new Candidate(0, "Mid");
+        Candidate candidate = new Candidate(0, "Jun", "");
+        Candidate candidate1 = new Candidate(0, "Mid", "");
         store.save(candidate);
         store.save(candidate1);
         Collection<Candidate> res = List.of(candidate, candidate1);
@@ -111,8 +111,8 @@ public class DbStoreTest {
     @Test
     public void whenFindByIdCandidates() {
         Store store = DbStore.instOf();
-        Candidate candidate = new Candidate(0, "Jun");
-        Candidate candidate1 = new Candidate(0, "Mid");
+        Candidate candidate = new Candidate(0, "Jun", "");
+        Candidate candidate1 = new Candidate(0, "Mid", "");
         store.save(candidate);
         store.save(candidate1);
         Candidate res = store.findByIdCon(candidate1.getId());
@@ -122,8 +122,8 @@ public class DbStoreTest {
     @Test
     public void whenFindByIdPost() {
         Store store = DbStore.instOf();
-        Post post = new Post(0, "Jun");
-        Post post1 = new Post(0, "Mid");
+        Post post = new Post(0, "Jun", "Jun", "Jun");
+        Post post1 = new Post(0, "Mid", "Jun", "Jun");
         store.save(post);
         store.save(post1);
         Post res = store.findById(post1.getId());
@@ -133,8 +133,8 @@ public class DbStoreTest {
     @Test
     public void whenRegisterUserExist() {
         Store store = DbStore.instOf();
-        User user = new User("oleg", "oleg@mail.ru", "oleg");
-        User user2 = new User("ivan", "oleg@mail.ru", "ivan");
+        User user = new User("oleg", "oleg@mail.ru", "oleg", "hr");
+        User user2 = new User("ivan", "oleg@mail.ru", "ivan", "candidate");
         store.addUser(user);
         store.addUser(user2);
         User user3 = store.findByEmail("oleg@mail.ru");
@@ -144,7 +144,7 @@ public class DbStoreTest {
     @Test
     public void whenFindByEmailWhenExist() {
         Store store = DbStore.instOf();
-        User user = new User("oleg", "oleg@mail.ru", "oleg");
+        User user = new User("oleg", "oleg@mail.ru", "oleg", "hr");
         store.addUser(user);
         User user1 = store.findByEmail("oleg@mail.ru");
         assertThat(user, is(user1));
